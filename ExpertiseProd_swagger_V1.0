@@ -1,0 +1,1162 @@
+{
+  "openapi":"3.0.3",
+  "info":{
+    "description":"Spécification des données à exposer par les opérateurs dans le cadre d'une expertise conjointe en production",
+    "version":"1.0",
+    "title":"Expertise conjointe - Prod"
+  },
+  "paths":{
+    "/demande_expertise":{
+      "post":{
+        "summary":"Request 1 - Demande d'expertise de l'OC vers l'OI",
+        "description":"Permet de déclencher le process d'expertise conjointe",
+        "operationId":"demande_expertise",
+        "requestBody":{
+          "description":"Demande expertise à déclarer chez l'OI/OC",
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/demande_expertise"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "200":{
+            "description":"Successful operation",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/reponse_demande_expertise"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Bad request",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/retour_erreur_expertise"
+                }
+              }
+            }          		
+          },
+          "404":{
+            "description":"Not found"
+          },
+          "405":{
+            "description":"Method Not Allowed"
+          }
+        }
+      }
+    },
+    "/cloture_expertise_oc":{
+      "post":{
+        "summary":"Request 2 - Clôture d'expertise de l'OC vers l'OI",
+        "description":"Permet de clôturer le process d'expertise conjointe par l'OC. Par exemple, pour ouvrir une nouvelle demande avec modification de RDV",
+        "operationId":"cloture_expertise_oc",
+        "requestBody":{
+          "description":"Clôture expertise par l'OC",
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/cloture_expertise_oc"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "200":{
+            "description":"Successful operation",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/cloture_expertise_oc"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Bad request",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/retour_erreur_expertise"
+                }
+              }
+            }          		
+          },
+          "405":{
+            "description":"Method Not Allowed"
+          }
+        }
+      }
+    },
+    "/cloture_expertise_oi":{
+      "post":{
+        "summary":"Request 3 - CR de clôture d'expertise de l'OI vers l'OC",
+        "description":"Permet de clôturer le process d'expertise conjointe par l'OI",
+        "operationId":"cloture_expertise_oi",
+        "requestBody":{
+          "description":"Clôture expertise par l'OI",
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/cloture_expertise_oi"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "200":{
+            "description":"Successful operation",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/reponse_cloture_expertise_oi"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Bad request",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/retour_erreur_expertise"
+                }
+              }
+            }          		
+          },
+          "405":{
+            "description":"Method Not Allowed"
+          }
+        }
+      }
+    },
+    "/pv_expertise":{
+      "post":{
+        "summary":"Request 4 - PV d'expertise envoyé par l'OI suite à la clôture de l'expertise conjointe avec l'OC",
+        "description":"Procès verbal de l'expertise conjointe",
+        "operationId":"pv_expertise",
+        "requestBody":{
+          "description":"Procès verbal de l'expertise conjointe de l'OI vers l'OC. Remplace le PV papier",
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/pv_expertise"
+              }
+            }
+          },
+          "required":true
+        },
+        "responses":{
+          "200":{
+            "description":"Successful operation",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/reponse_pv_expertise"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Bad request",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/retour_erreur_expertise"
+                }
+              }
+            }          		
+          },
+          "404":{
+            "description":"Not found"
+          },
+          "405":{
+            "description":"Method Not Allowed"
+          }
+        }
+      }
+    }
+  },
+  "components":{
+    "schemas":{
+      "retour_erreur_expertise":{
+        "required":[
+          "IdExpertise",
+          "Commentaire",
+          "CodeRejet",
+          "LibelleRejet"
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          },
+          "Commentaire":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Description du problème rencontré\n",
+            "example":"string"
+          },
+          "CodeRejet":{
+            "type":"string",
+            "enum":[
+              "FIMP14",
+              "FIMP15",
+              "FIMP16",
+              "FEXP01",
+              "FEXP02",
+              "FEXP03",
+              "FEXP05",
+              "FRDV03",
+              "FRDV04",
+              "FAUT01"
+            ],
+            "description":"Code correspondant au motif de rejet. Code FEXP04 n'est pas pris en compte car il ne correspond pas à un de rejet technique\n",
+            "example":"FIMP14"
+          },
+          "LibelleRejet":{
+            "type":"string",
+            "maxLength":520,
+            "description":"Libellé du type de clôture de la demande d'expertise\n",
+            "example":"TRAITEMENT IMPOSSIBLE : IDENTIFIANT COMMANDE INTERNE OC INCONNU POUR L'OC DEMANDEUR"
+          }
+        }
+      },		
+      "demande_expertise":{
+        "required":[
+          "IdExpertise",
+          "DemandeurInitial",
+          "ReferenceCommandeInterneOC",
+          "ReferencePrestationPrise",
+          "TypeIntervention",
+          "OI",
+          "OC",
+          "NomTechnicienOC",
+          "ContactTechnicienOC",
+          "LieuRDV",
+          "ReferencePM",
+          "IdRDV",
+          "Commentaire"
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          },
+          "DemandeurInitial":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC"
+            ],
+            "description":"Initiateur de la demande. valeurs possibles OI ou OC\n",
+            "example":"OC"
+          },
+          "ReferenceCommandeInterneOC":{
+            "type":"string",
+            "maxLength":30,
+            "description":"Référence de la commande prise interne OC de la commande concernée par l'expertise\n",
+            "example":"REF-CMD-OC-123"			
+          },
+          "ReferencePrestationPrise":{
+            "type":"string",
+            "maxLength":30,
+            "description":"Référence prestation prise de la commande concernée par l'expertise\n",
+            "example":"REF-PP-1234"
+          },
+          "TypeIntervention":{
+            "type":"string",
+            "enum":[
+              "EXPERTISE_CONTRADICTOIRE",
+              "AUTRE"
+            ],
+            "description":"Type d'intervention concernée par la demande. La valeur AUTRE sera utilisée pour les sujets à venir avant l'évolution protocolaire nécessaire\n",
+            "example":"EXPERTISE_CONTRADICTOIRE",			
+          },
+          "OI":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OI\n",
+            "example":"OIOI"
+          },
+          "OC":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OC\n",
+            "example":"OCOC"
+          },
+          "NomTechnicienOC":{
+            "type":"string",
+            "maxLength":50,
+            "description":"X\n",
+            "example":"Nom Prénom"
+          },
+          "ContactTechnicienOC":{
+            "type":"string",
+            "maxLength":10,
+            "description":"Numéro de téléphone du référent",
+            "example":"0606060606"
+          },
+          "LieuRDV":{
+            "type":"string",
+            "enum":[
+              "PM"
+            ],
+            "example":"PM"
+          },
+          "ReferencePM":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Référence du PM de la commande",
+            "example":"ADR_02805_FOU1"
+          },
+          "IdRDV":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Id du RDV retourné par le plan de charge de l'OI\n",
+            "example":"123-47656987"
+          },
+          "Commentaire":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Description du problème rencontré\n",
+            "example":"PBO introuvable - Le tech a trouvé une chambre vide"
+          }
+        }
+      },
+      "reponse_demande_expertise":{
+        "required":[
+          "IdExpertise",
+          "DemandeurInitial",
+          "ReferenceCommandeInterneOC",
+          "ReferencePrestationPrise",
+          "TypeIntervention",
+          "OI",
+          "OC",
+          "IdRDV",
+          "DateRDV",
+          "NomTechnicienOI",
+          "ContactTechnicienOI"
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          },
+          "DemandeurInitial":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC"
+            ],
+            "example":"OC",
+            "description":"Initiateur de la demande. valeurs possibles OI ou OC\n"
+          },
+          "ReferenceCommandeInterneOC":{
+            "type":"string",
+            "example":"REF-CMD-OC-123",
+            "maxLength":30,
+            "description":"Référence de la commande prise interne OC de la commande concernée par l'expertise\n"
+          },
+          "ReferencePrestationPrise":{
+            "type":"string",
+            "example":"REF-PP-1234",
+            "maxLength":30,
+            "description":"Référence prestation prise de la commande concernée par l'expertise\n"
+          },
+          "TypeIntervention":{
+            "type":"string",
+            "enum":[
+              "EXPERTISE_CONTRADICTOIRE",
+              "AUTRE"
+            ],
+            "example":"EXPERTISE_CONTRADICTOIRE",
+            "description":"Type d'intervention concernée par la demande. La valeur AUTRE sera utilisée pour les sujets à venir avant l'évolution protocolaire nécessaire \n"
+          },
+          "OI":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OI\n",
+            "example":"AAAA"
+          },
+          "OC":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OC\n",
+            "example":"BBBB"
+          },
+          "IdRDV":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Id du RDV retourné par le plan de charge de l'OI\n",
+            "example":"123456789"
+          },
+          "DateRDV":{
+            "type":"string",
+            "format":"date-time",
+            "description":"Date de l'annulation de la demande de l'expertise\n",
+            "example":"2024-01-02 10:00:00"
+          },
+          "NomTechnicienOI":{
+            "type":"string",
+            "maxLength":50,
+            "description":"X\n",
+            "example":"123456789"
+          },
+          "ContactTechnicienOI":{
+            "type":"string",
+            "maxLength":10,
+            "description":"Numéro de téléphone du référent\n",
+            "example":"123456789"
+          },
+          "Commentaire":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Commentaire OI\n",
+            "example":"string"
+          },
+          "CodeRejet":{
+            "type":"string",
+            "enum":[
+              "FEXP04",
+              "FAUT01"
+            ],
+            "description":"Uniquement si la réponse de l'OI est un KO. Code correspondant au motif de rejet si l'OI n'authorise pas l'ouverture de l'expertise.\n",
+            "example":"FEXP04"
+          },
+          "LibelleRejet":{
+            "type":"string",
+            "maxLength":520,
+            "description":"Si CodeRejet renseigné. Libellé du type de clôture de la demande d'expertise.\n",
+            "example":"TRAITEMENT IMPOSSIBLE : TRAVAUX EN COURS OU PLANIFIES"
+          },
+          "DateFinTravauxOI":{
+            "type":"string",
+            "format":"date",
+            "description":"Si CodeRejet = FEXP04. Date de la fin des travaux en cours ou planifiés.\n",
+            "example":"2024-01-02"
+          }
+        }
+      },
+      "cloture_expertise_oc":{
+        "required":[
+          "IdExpertise",
+          "DemandeurInitial",
+          "ReferenceCommandeInterneOC",
+          "ReferencePrestationPrise",
+          "TypeIntervention",
+          "OI",
+          "OC",
+          "IdRDV",
+          "DateRDV",
+          "DateAnnulationExpertise",
+          "CodeCloture",
+          "LibelleCloture",
+          "TechnicienOIPresent"
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          },
+          "DemandeurInitial":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC"
+            ],
+            "example":"OC",
+            "description":"Initiateur de la demande. valeurs possibles OI ou OC\n"
+          },
+          "ReferenceCommandeInterneOC":{
+            "type":"string",
+            "example":"REF-CMD-OC-123",
+            "maxLength":30,
+            "description":"Référence de la commande prise interne OC de la commande concernée par l'expertise\n"
+          },
+          "ReferencePrestationPrise":{
+            "type":"string",
+            "example":"REF-PP-1234",
+            "maxLength":30,
+            "description":"Référence prestation prise de la commande concernée par l'expertise\n"
+          },
+          "TypeIntervention":{
+            "type":"string",
+            "enum":[
+              "EXPERTISE_CONTRADICTOIRE",
+              "AUTRE"
+            ],
+            "example":"EXPERTISE_CONTRADICTOIRE",
+            "description":"Type d'intervention concernée par la demande. La valeur AUTRE sera utilisée pour les sujets à venir avant l'évolution protocolaire nécessaire \n"
+          },
+          "OI":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OI\n",
+            "example":"AAAA"
+          },
+          "OC":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OC\n",
+            "example":"BBBB"
+          },
+          "IdRDV":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Id du RDV retourné par le plan de charge de l'OI\n",
+            "example":"123456789"
+          },
+          "DateAnnulationExpertise":{
+            "type":"string",
+            "format":"date-time",
+            "description":"Date de l'annulation de la demande de l'expertise\n",
+            "example":"2024-01-02 10:00:00"
+          },
+          "CodeCloture":{
+            "type":"string",
+            "enum":[
+              "ERR08",
+              "RET01",
+              "RET02",
+              "RET03",
+              "RET04",
+              "RET05",
+              "RET06",
+              "STT01",
+              "STT02",
+              "STT03",
+              "EXC02",
+              "EXC03",
+              "ERR09"
+            ],
+            "description":"Code correspondant au motif de clôture\n",
+            "example":"ERR08"
+          },
+          "LibelleCloture":{
+            "type":"string",
+            "maxLength":520,
+            "description":"Libellé du type de clôture de la demande d'expertise\n",
+            "example":"RESILIATION_ANNULATION_RECUE"
+          },
+          "TechnicienOIPresent":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Libellé du type de clôture de la demande d'expertise\n",
+            "example":"N"
+          },
+          "Commentaire":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Commentaire de clôture\n",
+            "example":"Commentaire de clôture"
+          }
+        }
+      },
+      "cloture_expertise_oi":{
+        "required":[
+          "IdExpertise",
+          "ReferenceCommandeInterneOC",
+          "ReferencePrestationPrise",
+          "TypeIntervention",
+          "OI",
+          "OC",
+          "IdRDV",
+          "DateRDV",
+          "DateCRExpertise",
+          "TechnicienOCPresent",
+          "DefautIdentifie",
+          "CodeCloture",
+          "LibelleCloture",
+          "Commentaire",
+          "ROAModifier"
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          },
+          "DemandeurInitial":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC"
+            ],
+            "example":"OC",
+            "description":"Initiateur de la demande. valeurs possibles OI ou OC\n"
+          },
+          "ReferenceCommandeInterneOC":{
+            "type":"string",
+            "example":"REF-CMD-OC-123",
+            "maxLength":30,
+            "description":"Référence de la commande prise interne OC de la commande concernée par l'expertise\n"
+          },
+          "ReferencePrestationPrise":{
+            "type":"string",
+            "example":"REF-PP-1234",
+            "maxLength":30,
+            "description":"Référence prestation prise de la commande concernée par l'expertise\n"
+          },
+          "TypeIntervention":{
+            "type":"string",
+            "enum":[
+              "EXPERTISE_CONTRADICTOIRE",
+              "AUTRE"
+            ],
+            "example":"EXPERTISE_CONTRADICTOIRE",
+            "description":"Type d'intervention concernée par la demande. La valeur AUTRE sera utilisée pour les sujets à venir avant l'évolution protocolaire nécessaire \n"
+          },
+          "OI":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OI\n",
+            "example":"AAAA"
+          },
+          "OC":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OC\n",
+            "example":"BBBB"
+          },
+          "IdRDV":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Id du RDV retourné par le plan de charge de l'OI\n",
+            "example":"123456789"
+          },
+          "DateRDV":{
+            "type":"string",
+            "format":"date-time",
+            "description":"Date de l'expertise prévue\n",
+            "example":"2024-01-02 10:00:00"
+          },
+          "DateCRExpertise":{
+            "type":"string",
+            "format":"date-time",
+            "description":"Date de l'annulation de la demande de l'expertise\n",
+            "example":"2024-01-02 10:00:00"
+          },
+          "TechnicienOCPresent":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Présence du technicien OC lors de l'expertise planifiée\n",
+            "example":"O"
+          },
+          "DefautIdentifie":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Source de l'échec de raccordement identifiée O ou N\n",
+            "example":"O"
+          },
+          "CodeCloture":{
+            "type":"string",
+            "enum":[
+              "ERR08",
+              "RET01",
+              "RET02",
+              "RET03",
+              "RET04",
+              "RET05",
+              "RET06",
+              "STT01",
+              "STT02",
+              "STT03",
+              "EXC02",
+              "EXC03",
+              "ERR09"
+            ],
+            "description":"Code correspondant au motif de clôture\n",
+            "example":"ERR09"
+          },
+          "LibelleRejet":{
+            "type":"string",
+            "maxLength":520,
+            "description":"Libellé du type de clôture de la demande d'expertise\n",
+            "example":"O"
+          },
+          "Commentaire":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Descriptif des réparations effectuées ou du problème rencontré. Obligatoire si Type d'intervention = AUTRE\n",
+            "example":"O"
+          },
+          "ROAModifier":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Une modification de la route optique est-elle nécessaire suite à l'expertise ? La modification peut être à Chaud ou à Froid\n",
+            "example":"O"
+          },
+          "NumeroDecharge":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Si ROAModifier = O. Numéro de décharge fourni par E-mutation ou par la Hotline en cas de Reprovisioning à Chaud ou à Froid en cas de modification de RO avec MAJ référentiel OI nécessaire\n",
+            "example":"O"
+          },
+          "EnvoiFluxEchecNecessaire":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"O si l'ouverture d'un Froid est nécessaire pour la mise à jour de la route otique. Sinon N\n"
+          },
+          "InterventionComplementaireNecessaire":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Une intervention est-elle nécessaire suite à l'expertise ?\n",
+            "example":"O"
+          },
+          "Par":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC"
+            ],
+            "description":"Si InterventionComplementaireNecessaire = O\n",
+            "example":"OI"
+          },
+          "TypeInterventionFroid":{
+            "type":"string",
+            "enum":[
+              "GC_PUBLIC",
+              "PROBLEME_ADDUCTION",
+              "MISE_A_JOUR_SI_OI",
+              "DESATURATION",
+              "AJOUT_CAPACITE",
+              "PBO_INTROUVABLE",
+              "PROBLEME_DE_CHEMINEMENT_SUR_PARTIE_PUBLIQUE",
+              "PROBLEME_DE_CONTINUITE",
+              "AUTRE"
+            ],
+            "description":"Si InterventionComplementaireNecessaire = O. Type d'intervention à Froid déclenchée par l'OI. // Faut-il ajouter des motifs si intervention par OC ?\n",
+            "example":"PROBLEME_ADDUCTION"
+          },
+          "EnvoiFluxEchecNecessaireroid":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"O si Par = OI. Sinon N\n",
+            "example":"O"
+          },
+          "NumeroDechargeEchec":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Si Par = OI. Numéro de décharge fourni lors de l'ouverture du Froid\n",
+            "example":"O"
+          }
+        }
+      },
+      "reponse_cloture_expertise_oi":{
+        "required":[
+          "IdExpertise",
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          }
+        }
+      },		
+      "pv_expertise":{
+        "required":[
+          "IdExpertise",
+          "Date",
+          "OI",
+          "OC",
+          "HeureDebut",
+          "HeureFin",
+          "ReferencePBO",
+          "ReferenceCableVersPM",
+          "CouleurTubeVersPM",
+          "CouleurFibreVersPM",
+          "SignalPBO",
+          "ReferencePM",
+          "EtatJarretiere",
+          "SignalPM",
+          "TechnicienOCPresent",
+          "TechnicienOIPresent",
+          "NomOI",
+          "PrenomOI",
+          "ROConformeAuReferentiel",
+          "SignalOKApresExpertise",
+          "DescriptifIntervention",
+          "Responsabilité ",
+          "InterventionComplementaireNecessaire",
+          "Commentaire"
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          },
+          "Date":{
+            "type":"string",
+            "format":"date",
+            "description":"Date de la réalisation de l'expertise\n",
+            "example":"2024-01-02"
+          },
+          "OI":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OI\n",
+            "example":"AAAA"
+          },
+          "OC":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OC\n",
+            "example":"BBBB"
+          },
+          "HeureDebut":{
+            "type":"string",
+            "format":"time",
+            "description":"Heure de début de l'expertise\n",
+            "example":"10:00"
+          },
+          "HeureFin":{
+            "type":"string",
+            "format":"time",
+            "description":"Heure de début de l'expertise\n",
+            "example":"10:00"
+          },
+          "ReferencePBO":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Référence du PBO utilisé\n",
+            "example":"PBO_XX"
+          },
+          "ReferenceCableVersPM":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Référence du câble PBO utilisé\n",
+            "example":"CDI_PBO_XX"
+          },
+          "CouleurTubeVersPM":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Référence du câble PBO utilisé\n",
+            "example":"Rouge"
+          },
+          "CouleurFibreVersPM":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Référence du câble PBO utilisé\n",
+            "example":"Jaune"
+          },
+          "SignalPBO":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Signal relevé au niveau du PBO\n",
+            "example":"O"
+          },
+          "ValeurSignalMontantPBO":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Si signal = O\n",
+            "example":"1420"
+          },
+          "ValeurSignalDescendantPBO":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Si signal = O\n",
+            "example":"-17.95"
+          },
+          "ReferencePM":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Référence du PM utilisé\n",
+            "example":"PM_XX"
+          },
+          "EtatJarretiere":{
+            "type":"string",
+            "enum":[
+              "BON",
+              "HS",
+              "ENDOMMAGE"
+            ],
+            "description":"Etat de la jarretière au niveau du PM. // Valeurs à déterminer \n",
+            "example":"BON"
+          },
+          "SignalPM":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Signal relevé au niveau du PM\n",
+            "example":"O"
+          },
+          "ValeurSignalMontantPM":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Si signal = O\n",
+            "example":"1490"
+          },
+          "TechnicienOCPresent":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Présence du technicien OC lors de l'expertise\n",			
+            "example":"O"
+          },
+          "NomTechnicienOC":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Nom du technicien OC si TechnicienOCPresent = O \n",
+            "example":"DOE"
+          },
+          "PrenomTechnicienOC":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Prénom du technicien OC si TechnicienOCPresent = O \n",
+            "example":"JANE"
+          },
+          "TechnicienOIPresent":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Présence du technicien OI lors de l'expertise\n",
+            "example":"O"
+          },
+          "NomTechnicienOI":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Nom du technicien OI si TechnicienOIPresent = O \n",
+            "example":"DOE2"
+          },
+          "PrenomTechnicienOI":{
+            "type":"string",
+            "maxLength":50,
+            "description":"Prénom du technicien OI si TechnicienOIPresent = O \n",
+            "example":"JOHN"
+          },
+          "ROConformeAuReferentiel":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "example":"O",
+            "description":"Est-ce que la RO terrain est conforme au référentiel OI ?\n"
+          },
+          "ROTerrain":{
+            "type":"string",
+            "maxLength":1500,
+            "example":"Test",
+            "description":"RO terrain si ROConformeAuReferentiel = N. //Détailler les champs ou pas besoin ?\n"
+          },
+          "SignalOKApresExpertise":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "description":"Signal après l'expertise\n",			
+            "example":"O"
+          },
+          "DescriptifIntervention":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Descriptif du déroulé de l'intervention et du constat\n",
+            "example":"Travaux nécessaire au niveau du PBO"
+          },
+          "Responsabilité":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC",
+              "LITIGE"
+            ],
+            "example":"LITIGE",
+            "description":"La correction à faire suite à l'expertise est-elle de la responsabilité de l'OI ou l'OC ? En cas de désaccord : LITIGE \n"
+          },
+          "InterventionComplementaireNecessaire":{
+            "type":"string",
+            "enum":[
+              "O",
+              "N"
+            ],
+            "example":"O",
+            "description":"Une intervention est-elle nécessaire suite à l'expertise ?\n"
+          },
+          "Par":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC"
+            ],
+            "example":"OI",
+            "description":"La correction à faire suite à l'expertise est-elle de la responsabilité de l'OI ou l'OC ? si pas de compromis : LITIGE \n"
+          },
+          "TypeInterventionFroid":{
+            "type":"string",
+            "enum":[
+              "GC_PUBLIC",
+              "PROBLEME_ADDUCTION",
+              "MISE_A_JOUR_SI_OI",
+              "DESATURATION",
+              "AJOUT_CAPACITE",
+              "PBO_INTROUVABLE",
+              "PROBLEME_DE_CHEMINEMENT_SUR_PARTIE_PUBLIQUE",
+              "PROBLEME_DE_CONTINUITE",
+              "AUTRE"
+            ],
+            "description":"Si InterventionComplementaireNecessaire = O. Type d'intervention à Froid déclenchée par l'OI. // Faut-il ajouter des motifs si intervention par OC ?\n",
+            "example":"PROBLEME_ADDUCTION"
+          },
+          "IdIntervention":{
+            "type":"string",
+            "maxLength":255,
+            "description":"Pour récupérer des photos sur la nature du problème terrain. // A valider\n",
+            "example":"Id-19876"
+          },
+          "Commentaire":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Descriptif des réparations effectuées ou du problème rencontré. Obligatoire si Type d'intervention = AUTRE\n",
+            "example":"Commentaire PV"
+          }
+        }
+      },
+      "reponse_pv_expertise":{
+        "required":[
+          "IdExpertise",
+          "DemandeurInitial",
+          "ReferenceCommandeInterneOC",
+          "ReferencePrestationPrise",
+          "TypeIntervention",
+          "OI",
+          "OC",
+          "CodeCloture",
+          "LibelleCloture"
+        ],
+        "type":"object",
+        "properties":{
+          "IdExpertise":{
+            "type":"integer",
+            "format":"int64",
+            "example":1089345
+          },
+          "DemandeurInitial":{
+            "type":"string",
+            "enum":[
+              "OI",
+              "OC"
+            ],
+            "description":"Initiateur de la demande. valeurs possibles OI ou OC\n",			
+            "example":"OC"
+          },
+          "ReferenceCommandeInterneOC":{
+            "type":"string",
+            "maxLength":30,
+            "description":"Référence de la commande prise interne OC de la commande concernée par l'expertise\n",
+            "example":"REF-CMD-OC-123"
+          },
+          "ReferencePrestationPrise":{
+            "type":"string",
+            "maxLength":30,
+            "description":"Référence prestation prise de la commande concernée par l'expertise\n",
+            "example":"REF-PP-1234",
+          },
+          "TypeIntervention":{
+            "type":"string",
+            "enum":[
+              "EXPERTISE_CONTRADICTOIRE",
+              "AUTRE"
+            ],
+            "description":"Type d'intervention concernée par la demande. La valeur AUTRE sera utilisée pour les sujets à venir avant l'évolution protocolaire nécessaire \n",
+            "example":"EXPERTISE_CONTRADICTOIRE"
+          },
+          "OI":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OI\n",
+            "example":"AAAA"
+          },
+          "OC":{
+            "type":"string",
+            "maxLength":4,
+            "description":"Quadrigrame OC\n",
+            "example":"BBBB"
+          },
+          "Commentaire":{
+            "type":"string",
+            "maxLength":1500,
+            "description":"Commentaire de clôture\n",
+            "example":"Commentaire de clôture"
+          },
+          "CodeCloture":{
+            "type":"string",
+            "enum":[
+              "RET01",
+              "RET02",
+              "RET03",
+              "RET04",
+              "RET05",
+              "RET06",
+              "STT01",
+              "STT02",
+              "STT03",
+              "EXC02",
+              "ERR09"
+            ],
+            "description":"Code correspondant au motif de clôture\n",
+            "example":"RET01"
+          },
+          "LibelleCloture":{
+            "type":"string",
+            "maxLength":520,
+            "description":"Libellé du type de clôture de la demande d'expertise. Codes ERR08 + EXC03 non pris en compte dans le cas d'une réponse OC \n",
+            "example":"DEFAUT CONFIRME ET CORRIGE PAR OI"
+          }
+        }
+      }
+    }
+  }
+}
