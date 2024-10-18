@@ -1,0 +1,404 @@
+openapi: 3.0.3
+info:
+  title: API Expertise Conjointe en Production
+  description: API permettant de résoudre les échecs de raccordement après 2 rejets par l'OI.
+  version: 1.0.0
+paths:
+  /DemandeExpertiseOC:
+    post:
+      summary: Demande d'expertise OC
+      description: Flux OC vers OI. Ouverture d'une demande d'expertise. 
+        Une expertise conjointe pourra être déclenchée après un ou deux reprovisioning à froid. 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                  description: Identifiant unique pour une expertise.
+                ReferenceCommandeInterneOC:
+                  type: string
+                ReferencePrestationPrise:
+                  type: string
+                TypeIntervention:
+                  type: string
+                  enum: [EXPERTISE_CONTRADICTOIRE, AUTRE]
+                  description: La valeur "AUTRE" sera utilisée pour les sujets à venir avant l'évolution protocolaire nécessaire.
+                OI:
+                  type: string
+                  description: Quadrigramme OI.
+                OC:
+                  type: string
+                  description: Quadrigramme OC.
+                InfoRdv:
+                  type: object
+                  properties:
+                    ContactTechnicienOC:
+                      type: string
+                      example : "0612345678"
+                      description: Numéro de téléphone du référent OC.
+                    LieuRDV:
+                      type: string
+                      enum: [PM]
+                      example: PM
+                    ReferencePM:
+                      type: string
+                    IdRDV:
+                      type: string
+                      example: 123456
+                      description: Identifiant du RDV dans le plan de charge.
+                InfosEchec:
+                  type: object
+                  properties:
+                    Commentaire:
+                      type: string
+                      example: PBO introuvable aux coordonnées indiquées.
+                      description: Descriptif du problème et exigences terrain.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /RejetParOI:
+    post:
+      summary: Rejet par OI
+      description: Flux OI vers OC indiquant un rejet.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                  description: Identifiant unique pour l'expertise.
+                CodeRejet:
+                  type: string
+                  enum: [FIMP14, FIMP15, FIMP16, FEXP01, FEXP02, FEXP03, FEXP04, FEXP05, FEXP06, FRDV03, FRDV04, FAUT01]
+                  example: FEXP04
+                DateFinTravauxOI:
+                  type: string
+                  format: date-time
+                  description: >
+                    En cas d'utilisation du code rejet "FEXP04" : TRAVAUX EN COURS OU PLANIFIES.
+                Commentaire:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /AcceptationOI:
+    post:
+      summary: Acceptation OI
+      description: Flux OI vers OC confirmant l'acceptation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                  description: Identifiant unique pour l'expertise.
+                DateRDV:
+                  type: string
+                  format: date-time
+                ContactTechnicienOI:
+                  type: string
+                  example: "0698765432"
+                Commentaire:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /AnnulationParOC:
+    post:
+      summary: Annulation par OC
+      description: Flux OC vers OI pour annuler une demande d'expertise.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                  description: Identifiant unique pour l'expertise.
+                Commentaire:
+                  type: string
+                  example: RDV à reprendre.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /DemandeExpertiseOI:
+    post:
+      summary: Demande d'expertise OI
+      description: Flux OI vers OC pour demander une expertise.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                  description: Identifiant unique pour l'expertise.
+                ReferenceCommandeInterneOC:
+                  type: string
+                ReferencePrestationPrise:
+                  type: string
+                TypeIntervention:
+                  type: string
+                  enum: [EXPERTISE_CONTRADICTOIRE, AUTRE]
+                OI:
+                  type: string
+                OC:
+                  type: string
+                Commentaire:
+                  type: string
+                  example: Pas de défaut constaté lors des dernières interventions. Expertise nécessaire.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /RejetParOC:
+    post:
+      summary: Rejet par OC
+      description: Flux OC vers OI pour notifier un rejet.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                CodeRejet:
+                  type: string
+                  enum: [FIMP14, FIMP15, FIMP16, FEXP01, FEXP02, FEXP03, FEXP05, FEXP06, FAUT01]
+                  example: FEXP01
+                Commentaire:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /ConstatExpertiseOI:
+    post:
+      summary: Constat expertise OI
+      description: Clôture de l'expertise par OI avec rapport.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                Visite:
+                  type: object
+                  properties:
+                      TechnicienOCPresent:
+                        type: boolean
+                        example: true
+                      DechargeAbsence:
+                        type: string
+                      DefautIdentifie:
+                        type: boolean
+                        example: true
+                      CodeCloture:
+                        type: string
+                        enum: [ERR08, RET07, RET01, RET02, RET03, RET04, RET05, RET06, STT01, STT02, STT03, EXC02, EXC03, ERR09]
+                        example: RET01
+                      ROAModifier:
+                        type: boolean
+                      NumeroDechargeRO:
+                        type: string
+                      EnvoiFluxEchecNecessaireRO:
+                        type: boolean
+                      InterventionComplementaireNecessaire:
+                        type: boolean
+                      Par:
+                        type: string
+                        enum: [OI, OC]
+                      TypeIntervention:
+                        type: string
+                        enum: [GC_PUBLIC, PROBLEME_ADDUCTION, MISE_A_JOUR_SI_OI, DESATURATION, AJOUT_CAPACITE, PBO_INTROUVABLE, PROBLEME_DE_CHEMINEMENT_SUR_PARTIE_PUBLIQUE, PROBLEME_DE_CONTINUITE, AUTRE]
+                      EnvoiFluxEchecNecessaire:
+                        type: string
+                        enum: [O]
+                        description: Obligatoire si Par = OI.
+                      NumeroDechargeFroid:
+                        type: string
+                        description: Numéro de décharge d'ouverture du Froid
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /PvExpertise:
+    post:
+      summary: PV Expertise
+      description: Flux OI vers OC pour rapporter une expertise partielle.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                  description: Identifiant unique qui identifie une demande d'expertise de son ouverture à sa clôture.
+                Date:
+                  type: string
+                  format: date-time
+                  description: Date de l'intervention.
+                OI:
+                  type: string
+                  description: Quadrigramme de l'OI.
+                OC:
+                  type: string
+                  description: Quadrigramme de l'OC.
+                HeureDebut:
+                  type: string
+                  format: time
+                  description: Heure de début de l'intervention.
+                HeureFin:
+                  type: string
+                  format: time
+                  description: Heure de fin de l'intervention.
+                RelevePBO:
+                  type: object
+                  properties:
+                    ReferencePBO:
+                      type: string
+                    ReferenceCableVersPM:
+                      type: string
+                    CouleurTubeVersPM:
+                      type: string
+                    CouleurFibreVersPM:
+                      type: string
+                    MesureSignalPBO:
+                      type: boolean
+                    ValeurSignalMontantPBO:
+                      type: string
+                      description: Obligatoire si MesureSignalPBO = true.
+                    ValeurSignalDescendantPBO:
+                      type: string
+                      description: Obligatoire si MesureSignalPBO = true.
+                RelevePM:
+                  type: object
+                  properties:
+                    ReferencePM:
+                      type: string
+                    EtatJarretiere:
+                      type: string
+                    MesureSignalPM:
+                      type: boolean
+                    ValeurSignalMontantPM:
+                      type: string
+                      description: Obligatoire si MesureSignalPM = true.
+                CompteRendu:
+                  type: object
+                  properties:
+                    TechnicienOCPresent:
+                      type: boolean
+                    TechnicienOIPresent:
+                      type: boolean
+                    ROConformeAuReferentiel:
+                      type: boolean
+                    ROTerrain:
+                      type: string
+                      description: Obligatoire si ROConformeAuReferentiel = false.
+                    SignalOKApresExpertise:
+                      type: boolean
+                    DescriptifIntervention:
+                      type: string
+                    Responsabilité:
+                      type: string
+                      enum: [OC, OI, LITIGE]
+                    InterventionComplementaireNecessaire:
+                      type: boolean
+                    Par:
+                      type: string
+                      enum: [OI, OC]
+                      description: Obligatoire si InterventionComplementaireNecessaire = true.
+                    TypeIntervention:
+                      type: string
+                      enum: [GC_PUBLIC, PROBLEME_ADDUCTION, MISE_A_JOUR_SI_OI, DESATURATION, AJOUT_CAPACITE, PBO_INTROUVABLE, PROBLEME_DE_CHEMINEMENT_SUR_PARTIE_PUBLIQUE, PROBLEME_DE_CONTINUITE, AUTRE]
+                      description: Obligatoire si InterventionComplementaireNecessaire = true.
+                    IdIntervention:
+                      type: string
+                      description: Une ou plusieurs photos du terrain pourront être fournies.
+                    Commentaire:
+                      type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /ReponseOC:
+    post:
+      summary: Réponse OC
+      description: Réponse de l'OC après expertise.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                IdExpertise:
+                  type: string
+                Commentaire:
+                  type: string
+                CodeCloture:
+                  type: string
+                  enum: [ERR08, RET07, RET01, RET02, RET03, RET04, RET05, RET06, STT01, STT02, STT03, EXC02, EXC03, ERR09]
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
