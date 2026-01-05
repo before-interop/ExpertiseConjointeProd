@@ -1,0 +1,1180 @@
+openapi: 3.0.3
+info:
+  title: Expertise Conjointe en Production API
+  version: 1.0.0
+  description: 'API INTEROP pour l''objet **Trouble Ticket Expertise Conjointe en
+    Production**.
+
+    Cette API expose la gestion des tickets, des notes, des pièces jointes et des
+    événements'
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: '{protocol}://{host}:{port}{basePath}'
+  variables:
+    protocol:
+      enum:
+      - https
+      - http
+      default: https
+    host:
+      default: localhost
+    port:
+      default: '8080'
+    basePath:
+      default: /api
+tags:
+- name: TroubleTicket
+  description: Gestion des tickets Expertise Conjointe en Production
+- name: Note
+  description: Gestion des notes liées aux tickets Expertise Conjointe en Production
+- name: Attachment
+  description: Gestion des pièces attachées liées aux tickets Expertise Conjointe
+    en Production
+- name: Event
+  description: Gestion des événements liés aux tickets, notes et pièces attachées
+paths:
+  /expertise-conjointe-productions:
+    get:
+      tags:
+      - TroubleTicket
+      summary: Rechercher des tickets Expertise Conjointe en Production
+      operationId: getExpertiseConjointeProductions
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/limit
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/offset
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/sort
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: La liste des tickets Expertise Conjointe en Production
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    head:
+      tags:
+      - TroubleTicket
+      summary: Compter le nombre de tickets Expertise Conjointe en Production
+      operationId: countExpertiseConjointeProductions
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: Le nombre de tickets correspondant aux critères
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    post:
+      tags:
+      - TroubleTicket
+      summary: Créer un ticket Expertise Conjointe en Production
+      operationId: createExpertiseConjointeProduction
+      requestBody:
+        description: Le ticket à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+      responses:
+        '201': &id001
+          description: Le ticket créé
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '403':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+  /expertise-conjointe-productions/{ticketId}:
+    parameters:
+    - $ref: '#/components/parameters/ticketId'
+    get:
+      tags:
+      - TroubleTicket
+      summary: Consulter un ticket Expertise Conjointe en Production
+      operationId: getExpertiseConjointeProduction
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
+      responses:
+        '200':
+          description: Le ticket Expertise Conjointe en Production
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    put:
+      tags:
+      - TroubleTicket
+      summary: Mettre à jour complètement un ticket Expertise Conjointe en Production
+      operationId: updateExpertiseConjointeProduction
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
+      requestBody:
+        description: Le ticket à mettre à jour
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+      responses:
+        '200': *id001
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '403':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        '412':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    patch:
+      tags:
+      - TroubleTicket
+      summary: Mettre à jour partiellement un ticket Expertise Conjointe en Production
+      operationId: patchExpertiseConjointeProduction
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/parameters/If-Match
+      requestBody:
+        description: Les champs à mettre à jour
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+      responses:
+        '200': *id001
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '403':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        '412':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+  /expertise-conjointe-productions/{ticketId}/note:
+    parameters:
+    - $ref: '#/components/parameters/ticketId'
+    get:
+      tags:
+      - Note
+      summary: Rechercher des notes liées à un ticket Expertise Conjointe en Production
+      operationId: getExpertiseConjointeProductionNotes
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/limit
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/offset
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/sort
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: La liste des notes
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    head:
+      tags:
+      - Note
+      summary: Compter les notes liées à un ticket Expertise Conjointe en Production
+      operationId: countExpertiseConjointeProductionNotes
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: Le nombre de notes correspondant aux critères
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    post:
+      tags:
+      - Note
+      summary: Créer une note pour un ticket Expertise Conjointe en Production
+      operationId: createExpertiseConjointeProductionNote
+      requestBody:
+        description: La note à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
+      responses:
+        '201':
+          description: La note créée
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+  /expertise-conjointe-productions/{ticketId}/attachment:
+    parameters:
+    - $ref: '#/components/parameters/ticketId'
+    get:
+      tags:
+      - Attachment
+      summary: Rechercher des pièces attachées liées à un ticket Expertise Conjointe
+        en Production
+      operationId: getExpertiseConjointeProductionAttachments
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/limit
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/offset
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/sort
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: La liste des pièces attachées
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttachmentECProduction'
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    head:
+      tags:
+      - Attachment
+      summary: Compter les pièces attachées liées à un ticket Expertise Conjointe
+        en Production
+      operationId: countExpertiseConjointeProductionAttachments
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: Le nombre de pièces attachées correspondant aux critères
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    post:
+      tags:
+      - Attachment
+      summary: Créer une pièce attachée pour un ticket Expertise Conjointe en Production
+      operationId: createExpertiseConjointeProductionAttachment
+      requestBody:
+        description: Les métadonnées de la pièce à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/AttachmentECProduction'
+              required:
+              - size
+              - sha256
+      responses:
+        '200':
+          description: Métadonnées multipart générées pour l'upload par tronçons
+          headers:
+            ETag:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
+            X-Chunk-Size:
+              description: Taille maximale (en octets) autorisée pour un tronçon
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentECProductionMultiPart'
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+  /expertise-conjointe-productions/{ticketId}/attachment/{attachmentId}/content:
+    parameters:
+    - $ref: '#/components/parameters/ticketId'
+    - $ref: '#/components/parameters/attachmentId'
+    get:
+      tags:
+      - Attachment
+      summary: Télécharger le contenu d’une pièce attachée
+      operationId: downloadExpertiseConjointeProductionAttachment
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Match
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-None-Match
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Modified-Since
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/If-Unmodified-Since
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/tools/attachment/attachment.openapi.yaml#/components/parameters/Range
+      responses:
+        '200':
+          description: Le contenu binaire de la pièce attachée
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        '412':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-412
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+  /expertise-conjointe-productions/{ticketId}/attachment/{attachmentId}/content/{chunkIndex}:
+    parameters:
+    - $ref: '#/components/parameters/ticketId'
+    - $ref: '#/components/parameters/attachmentId'
+    - $ref: '#/components/parameters/chunkIndex'
+    post:
+      tags:
+      - Attachment
+      summary: Uploader un tronçon du contenu d’une pièce attachée
+      operationId: uploadExpertiseConjointeProductionAttachmentContentChunk
+      requestBody:
+        description: Un tronçon du contenu de la pièce attachée
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Le tronçon binaire
+                metadata:
+                  $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/Chunk
+              required:
+              - file
+              - metadata
+      responses:
+        '200':
+          description: Tronçon uploadé (uploadChunks mis à jour)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentECProductionMultiPart'
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        '413':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-413
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+  /expertise-conjointe-productions/{ticketId}/attachment/{attachmentId}/finalize:
+    parameters:
+    - $ref: '#/components/parameters/ticketId'
+    - $ref: '#/components/parameters/attachmentId'
+    post:
+      tags:
+      - Attachment
+      summary: Finaliser la création du contenu d’une pièce attachée
+      operationId: finalizeExpertiseConjointeProductionAttachmentCreation
+      requestBody:
+        description: Aucune donnée requise (finalisation)
+        content:
+          application/json:
+            schema:
+              type: object
+              nullable: true
+      responses:
+        '200':
+          description: Tous les tronçons ont été uploadés, agrégation et validation
+            lancées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentECProductionMultiPart'
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+  /expertise-conjointe-productions/event:
+    get:
+      tags:
+      - Event
+      summary: Rechercher des événements liés aux tickets Expertise Conjointe en Production
+      operationId: getExpertiseConjointeProductionEvents
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/limit
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/offset
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/parameters/sort
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/fields.openapi.yaml#/components/parameters/fields
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: La liste des événements
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+            X-Result-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Result-Count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    head:
+      tags:
+      - Event
+      summary: Compter les événements liés aux tickets Expertise Conjointe en Production
+      operationId: countExpertiseConjointeProductionEvents
+      parameters:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/filters.openapi.yaml#/components/parameters/filters
+      responses:
+        '200':
+          description: Le nombre d'événements correspondant aux critères
+          headers:
+            X-Total-Count:
+              $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/paginate.openapi.yaml#/components/headers/X-Total-Count
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        default:
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/default
+    post:
+      tags:
+      - Event
+      summary: Diffuser un événement (OC) lié à un ticket/notes/pièces
+      operationId: event
+      requestBody:
+        description: L'événement à diffuser
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Événement reçu (avec éventuel body JSON de confirmation)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '204':
+          description: Événement reçu, sans corps de réponse
+        '400':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-400
+        '403':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-403
+        '404':
+          $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/responses/errors.openapi.yaml#/components/responses/Error-404
+components:
+  parameters:
+    ticketId:
+      name: ticketId
+      in: path
+      description: Identifiant du ticket Expertise Conjointe en Production
+      required: true
+      schema:
+        type: string
+    attachmentId:
+      name: attachmentId
+      in: path
+      description: Identifiant de la pièce attachée
+      required: true
+      schema:
+        type: string
+    chunkIndex:
+      name: chunkIndex
+      in: path
+      description: Index du tronçon
+      required: true
+      schema:
+        type: string
+  schemas:
+    Location:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          LocationPM: '#/components/schemas/LocationPM'
+      required:
+      - type
+      properties:
+        type:
+          type: string
+    LocationPM:
+      allOf:
+      - $ref: '#/components/schemas/Location'
+      - type: object
+        required:
+        - pm
+        properties:
+          pm:
+            $ref: '#/components/schemas/PM'
+    TicketContradictoryProductionExpertise:
+      allOf:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/TroubleTicket.openapi.yaml#/components/schemas/TroubleTicket
+      - type: object
+        required:
+        - '@type'
+        - code_oc
+        - code_oi
+        - expertise
+        - initialRequest
+        properties:
+          appointment:
+            $ref: '#/components/schemas/Appointment'
+          expertise:
+            $ref: '#/components/schemas/Expertise'
+          expertiseReport:
+            $ref: '#/components/schemas/ExpertiseReport'
+          initialRequest:
+            description: Nature de l’opérateur ayant initié le ticket (OI/OC).
+            type: string
+            enum:
+            - OC
+            - OI
+          code_oi:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+            description: Quadrigramme de l’OI (code ARCEP).
+          code_oc:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
+            description: Quadrigramme de l’OC (code ARCEP).
+          statusChangeDetail:
+            type: string
+          statusChangeReason:
+            type: string
+            description: Motif de changement d’état du ticket.
+            enum:
+            - DEFAUT_NON_CORRIGE
+            - DEFAUT_CONFIRME_ET_CORRIGE_PAR_OI
+            - PRELOC_ERRONEE_DEFAUT_CORRIGE_PAR_OI
+            - CLOTURE_DU_TICKET_D_INCIDENT_GENERALISE
+            - DEFAUT_CAUSE_PAR_UN_TIERS_IDENTIFIE
+            - DEFAUT_LIE_A_DES_CAUSES_EXCEPTIONNELLES
+            - DEFAUT_LIE_A_UN_VANDALISME
+            - PAS_DE_DEFAUT_CONSTATE_SUR_LA_PARTIE_OI
+            - DEFAUT_DETECTE_RESPONSABILITE_OC
+            - TECHNICIEN_OC_ABSENT
+            - TECHNICIEN_OI_ABSENT
+            - RESEAU_OI_INACCESSIBLE
+            - TRAITEMENT_IMPOSSIBLE_IDENTIFIANT_COMMANDE_INTERNE_OC_INCONNU
+            - TRAITEMENT_IMPOSSIBLE_CHAMPS_OBLIGATOIRES_MANQUANTS
+            - TRAITEMENT_IMPOSSIBLE_CHAMPS_INCOHERENTS
+            - TRAITEMENT_IMPOSSIBLE_COMMANDE_EN_REFERENCE_PAS_DANS_L_ETAT_ATTENDU
+            - TRAITEMENT_IMPOSSIBLE_ID_EXPERTISE_OC_DEJA_UTILISE
+            - TRAITEMENT_IMPOSSIBLE_DEMANDE_EXPERTISE_DEJA_EN_COURS
+            - TRAITEMENT_IMPOSSIBLE_TRAVAUX_EN_COURS_OU_PLANIFIES
+            - TRAITEMENT_IMPOSSIBLE_NOMBRE_ECHECS_NON_ATTEINT
+            - TRAITEMENT_IMPOSSIBLE_REFUS_OC
+            - RDV_ID_RDV_INCONNU_POUR_OC_DEMANDEUR
+            - RDV_ETAT_RDV_NON_VALIDE
+            - AUTRE_MOTIFS_LIBRES
+            - RESILIATION_ANNULATION_RECUE
+            - ANNULATION_EXPERTISE_SUR_DEMANDE_OC
+            - IMPOSSIBILITE_PRISE_DE_RDV
+          statusChangeReasonCode:
+            type: string
+            enum:
+            - ERR08
+            - ERR09
+            - EXC02
+            - EXC03
+            - EXC04
+            - EXC06
+            - EXC07
+            - FAUT01
+            - FEXP01
+            - FEXP02
+            - FEXP03
+            - FEXP04
+            - FEXP05
+            - FEXP06
+            - FIMP14
+            - FIMP15
+            - FIMP16
+            - FRDV03
+            - FRDV04
+            - RET01
+            - RET02
+            - RET03
+            - RET04
+            - RET05
+            - RET06
+            - STT01
+            - STT02
+            description: Code du motif de changement d’état (selon transition FINISHED
+              / REJECTED / CANCELLED).
+          '@type':
+            type: string
+            description: Type de ticket Expertise Conjointe en Production
+            enum:
+            - expertiseConjointeProduction
+            - AUTRE
+            default: expertiseConjointeProduction
+          lastModificationBy:
+            type: string
+            enum:
+            - OI
+            - OC
+            description: Permet d’identifier l’auteur du dernier changement du ticket
+          status:
+            type: string
+            enum:
+            - ACKNOWLEDGED
+            - CANCELED
+            - REJECTED
+            - IN_PROGRESS
+            - PLANNED
+            - CONFIRMED
+            - CLOSED
+            - RESOLVED
+          acknowledgedDate:
+            type: string
+            format: date
+            description: Date de passage au status ACKNOWLEDGED
+    Expertise:
+      type: object
+      required:
+      - accessOrder
+      - location
+      properties:
+        accessOrder:
+          $ref: '#/components/schemas/AccessOrder'
+        location:
+          $ref: '#/components/schemas/LocationPM'
+        localisation:
+          type: string
+          description: Localisation de l’expertise (ex. PM).
+        typeLocalisation:
+          type: string
+          description: Type de localisation
+          enum:
+          - PM
+          default: PM
+        referenceLocalisation:
+          type: string
+          description: Référence PM pour la localisation de l’expertise.
+    ExpertiseReport:
+      type: object
+      required:
+      - presenceStatus
+      - responsibility
+      properties:
+        pboReading:
+          $ref: '#/components/schemas/PBOReading'
+        pmReading:
+          $ref: '#/components/schemas/PMReading'
+        presenceStatus:
+          $ref: '#/components/schemas/PresenceStatus'
+        report:
+          $ref: '#/components/schemas/Report'
+        responsibility:
+          type: string
+          enum:
+          - DISPUTE
+          - OC
+          - OI
+    AccessOrder:
+      type: object
+      required:
+      - socketServiceReference
+      properties:
+        internalOCOrderReference:
+          type: string
+          description: Référence de la commande accès interne OC (referenceCommandeInterneOC).
+        socketServiceReference:
+          type: string
+          description: Référence de la prestation prise (referencePrestationPrise).
+    Appointment:
+      type: object
+      required:
+      - primaryOCContact
+      properties:
+        appointmentId:
+          type: string
+          description: Identifiant RDV (idRDV) généré par l’API Plan de charge.
+        primaryOCContact:
+          $ref: '#/components/schemas/ContactMedium'
+          description: Contact principal OC (technicien OC ou hotline OC).
+        primaryOIContact:
+          $ref: '#/components/schemas/ContactMedium'
+          description: Contact principal OI (technicien OI ou hotline OI).
+        secondaryOCContact:
+          $ref: '#/components/schemas/ContactMedium'
+          description: Contact secondaire OC.
+        secondaryOIContact:
+          $ref: '#/components/schemas/ContactMedium'
+          description: Contact secondaire OI.
+    ContactMedium:
+      type: object
+      required:
+      - mediumType
+      properties:
+        mediumType:
+          type: string
+          enum:
+          - EMAIL
+          - PHONE
+        value:
+          type: string
+    OpticalRouteInformation:
+      type: object
+      properties:
+        dischargeNumber:
+          type: string
+          description: Numéro de décharge si envoi flux échec nécessaire.
+        sendFailureFlowRequired:
+          type: boolean
+          description: Envoi flux échec nécessaire (Oui = reprovisionnement à froid
+            / Non = reprovisionnement à chaud).
+    PBOReading:
+      type: object
+      required:
+      - cableToPMReference
+      - fiberColorToPM
+      - pboReference
+      - pboSignalMeasurement
+      - tubeColorToPM
+      properties:
+        cableToPMReference:
+          type: string
+          description: Référence câble vers PM.
+        downstreamSignalValue:
+          type: number
+          format: float
+          description: Valeur du signal descendant.
+        fiberColorToPM:
+          type: string
+          description: Couleur de la fibre vers PM.
+        pboReference:
+          type: string
+          description: Référence PBO.
+        pboSignalMeasurement:
+          type: boolean
+          description: Mesure du signal au PBO réalisée.
+        tubeColorToPM:
+          type: string
+          description: Couleur du tube vers PM.
+        upstreamSignalValue:
+          type: number
+          format: float
+          description: Valeur du signal montant.
+    PMReading:
+      type: object
+      required:
+      - garterStatus
+      - pmReference
+      properties:
+        garterStatus:
+          type: string
+          enum:
+          - KO
+          - OK
+          description: État jarretière.
+        pmReference:
+          type: string
+          description: Référence PM.
+        pmSignalMeasurement:
+          type: boolean
+          description: Mesure du signal au PM réalisée.
+        upstreamSignalValue:
+          type: number
+          format: float
+          description: Valeur du signal montant.
+    PresenceStatus:
+      type: object
+      required:
+      - ocTechnicianPresent
+      - oiTechnicianPresent
+      properties:
+        ocTechnicianAbsenceAcknowledgment:
+          type: string
+          description: Numéro de décharge communiqué par l'OC pour valider l'absence
+            du technicien OC (en l’absence de photo du PM).
+        ocTechnicianPresent:
+          type: boolean
+          description: Indique si le technicien OC était présent.
+        oiTechnicianPresent:
+          type: boolean
+          description: Indique si le technicien OI était présent.
+    Report:
+      type: object
+      required:
+      - identifiedDefect
+      - interventionDescription
+      - isNecessary
+      - opticalRouteCompliantWithReference
+      - pboCableReference
+      - pboFiberInformation
+      - pboTubeInformation
+      - pmModuleCableReference
+      - pmModuleFiberInformation
+      - pmModuleName
+      - pmModulePosition
+      - pmModuleTubeInformation
+      - signalOKAfterExpertise
+      - socketConnectorColor
+      - socketConnectorNumber
+      - toBeModified
+      properties:
+        additionalIntervention:
+          $ref: '#/components/schemas/AdditionalIntervention'
+        identifiedDefect:
+          type: boolean
+          description: Défaut identifié.
+        interventionDescription:
+          type: string
+          description: Description de l’intervention d’expertise conjointe.
+        isNecessary:
+          type: boolean
+        opticalRouteCompliantWithReference:
+          type: boolean
+          description: Route optique conforme au référentiel OI.
+        opticalRouteInformation:
+          $ref: '#/components/schemas/OpticalRouteInformation'
+        pboCableReference:
+          type: string
+          description: Référence câble PBO.
+        pboFiberInformation:
+          type: string
+          description: Information fibre PBO.
+        pboTubeInformation:
+          type: string
+          description: Information tube PBO.
+        pmModuleCableReference:
+          type: string
+          description: Référence câble module PM.
+        pmModuleFiberInformation:
+          type: string
+          description: Information fibre module PM.
+        pmModuleName:
+          type: string
+          description: Nom module PM.
+        pmModulePosition:
+          type: string
+          description: Position module PM.
+        pmModuleTubeInformation:
+          type: string
+          description: Information tube module PM.
+        signalOKAfterExpertise:
+          type: boolean
+          description: Signal OK après expertise.
+        socketConnectorColor:
+          type: string
+          enum:
+          - BLUE
+          - GREEN
+          - RED
+          - YELLOW
+          description: Couleur connecteur prise.
+        socketConnectorNumber:
+          type: integer
+          format: int32
+          description: Numéro connecteur prise.
+        toBeModified:
+          type: boolean
+          description: Route optique à modifier (ROA).
+    AdditionalIntervention:
+      type: object
+      properties:
+        dischargeNumber:
+          type: string
+        intervenor:
+          type: string
+          enum:
+          - OC
+          - OI
+          description: 'Nature de l’opérateur devant intervenir : OI / OC.'
+        interventionId:
+          type: string
+        interventionNature:
+          type: string
+          enum:
+          - GC_PUBLIC
+          - PROBLEME_ADDUCTION
+          - MISE_A_JOUR_SI_OI
+          - DESATURATION
+          - AJOUT_CAPACITE
+          - PBO_INTROUVABLE
+          - PROBLEME_DE_CHEMINEMENT_SUR_PARTIE_PUBLIQUE
+          - PROBLEME_DE_CONTINUITE
+          - AUTRE_INTERVENTION_COMPLEMENTAIRE
+          description: Nature de l’intervention complémentaire.
+        sendFailureFlowRequired:
+          type: boolean
+          description: Envoi flux échec nécessaire.
+        idIntervention:
+          type: string
+          description: Identifiant de l’intervention complémentaire.
+        numeroDecharge:
+          type: string
+          description: Numéro de décharge.
+    Adress:
+      type: object
+      properties:
+        '@baseType':
+          type: string
+        '@schemaLocation':
+          type: string
+        '@type':
+          type: string
+        city:
+          type: string
+        code_ban:
+          type: string
+        code_hexacle:
+          type: string
+          minLength: 10
+          maxLength: 10
+        code_insee:
+          type: string
+        code_rivoli:
+          type: string
+        country:
+          type: string
+        locality:
+          type: string
+        postcode:
+          type: string
+        stateOrProvince:
+          type: string
+        streetName:
+          type: string
+        streetNr:
+          type: string
+        streetNrSuffix:
+          type: string
+        streetSuffix:
+          type: string
+        streetType:
+          type: string
+    PM:
+      $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/PM
+    RelatedParty:
+      type: object
+      required:
+      - id
+      properties:
+        '@baseType':
+          type: string
+        '@referredType':
+          type: string
+        '@type':
+          type: string
+        id:
+          type: string
+        role:
+          type: string
+    ECProductionMimeType:
+      type: object
+      properties:
+        mimeType:
+          type: string
+          enum:
+          - application/pdf
+          - application/vnd.oasis.opendocument.spreadsheet
+          - application/vnd.oasis.opendocument.text
+          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+          - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+          - text/csv
+          - image/jpeg
+          - image/jpg
+          - image/png
+          - image/svg+xml
+    ECProductionRelatedEntity:
+      type: object
+      properties:
+        relatedEntity:
+          type: array
+          description: Référence au ticket Expertise Conjointe en Production
+          minItems: 1
+          maxItems: 1
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/RelatedECP'
+    AttachmentECProduction:
+      allOf:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentBase
+      - $ref: '#/components/schemas/ECProductionRelatedEntity'
+      discriminator:
+        propertyName: '@type'
+        mapping:
+          documentMonoPartStandard: '#/components/schemas/AttachmentECProductionMonoPartStandard'
+          documentMultiPartStandard: '#/components/schemas/AttachmentECProductionMultiPartStandard'
+          documentMonoPart: '#/components/schemas/AttachmentECProductionMonoPart'
+          documentMultiPart: '#/components/schemas/AttachmentECProductionMultiPart'
+    AttachmentECProductionMonoPart:
+      allOf:
+      - $ref: '#/components/schemas/AttachmentECProduction'
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMonoPart
+      properties:
+        '@type':
+          type: string
+          default: documentMonoPart
+      required:
+      - '@type'
+    AttachmentECProductionMultiPart:
+      allOf:
+      - $ref: '#/components/schemas/AttachmentECProduction'
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Attachment.openapi.yaml#/components/schemas/AttachmentMultiPart
+      properties:
+        '@type':
+          type: string
+          default: documentMultiPart
+      required:
+      - '@type'
+    AttachmentECProductionMonoPartStandard:
+      allOf:
+      - $ref: '#/components/schemas/AttachmentECProductionMonoPart'
+      - $ref: '#/components/schemas/ECProductionMimeType'
+      properties:
+        '@type':
+          type: string
+          default: documentMonoPartStandard
+      required:
+      - '@type'
+    AttachmentECProductionMultiPartStandard:
+      allOf:
+      - $ref: '#/components/schemas/AttachmentECProductionMultiPart'
+      - $ref: '#/components/schemas/ECProductionMimeType'
+      properties:
+        '@type':
+          type: string
+          default: documentMultiPartStandard
+      required:
+      - '@type'
+    RelatedECP:
+      allOf:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/RelatedEntity.openapi.yaml#/components/schemas/RelatedEntity
+      - type: object
+        properties:
+          '@referredType':
+            type: string
+            default: ExpertiseConjointeProduction
+          role:
+            type: string
+            default: troubleTicket
+    Event:
+      allOf:
+      - $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/CloudEvent.openapi.yaml#/components/schemas/CloudEvent
+      - type: object
+        required:
+        - time
+        - subject
+        - type
+        discriminator:
+          propertyName: type
+          mapping:
+            fr.interop.ecp.create: '#/components/schemas/EventECPCreate'
+            fr.interop.ecp.update: '#/components/schemas/EventECPUpdate'
+            fr.interop.ecp.note.create: '#/components/schemas/EventECPNoteCreate'
+            fr.interop.ecp.attachment.create: '#/components/schemas/EventECPAttachmentCreate'
+            fr.interop.ecp.attachment.update: '#/components/schemas/EventECPAttachmentUpdate'
+        properties:
+          subject:
+            type: string
+            format: uuid
+          type:
+            type: string
+          datacontenttype:
+            type: string
+            default: application/json
+    EventECPCreate:
+      allOf:
+      - $ref: '#/components/schemas/Event'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+    EventECPUpdate:
+      allOf:
+      - $ref: '#/components/schemas/Event'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
+    EventECPNoteCreate:
+      allOf:
+      - $ref: '#/components/schemas/Event'
+      - type: object
+        properties:
+          data:
+            $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Note.openapi.yaml#/components/schemas/Note
+    EventECPAttachmentCreate:
+      allOf:
+      - $ref: '#/components/schemas/Event'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/AttachmentECProduction'
+    EventECPAttachmentUpdate:
+      allOf:
+      - $ref: '#/components/schemas/Event'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/AttachmentECProduction'
