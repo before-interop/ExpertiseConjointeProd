@@ -1141,22 +1141,6 @@
           },
           "location": {
             "$ref": "#/components/schemas/LocationPM"
-          },
-          "localisation": {
-            "type": "string",
-            "description": "Localisation de l’expertise (ex. PM)."
-          },
-          "typeLocalisation": {
-            "type": "string",
-            "description": "Type de localisation",
-            "enum": [
-              "PM"
-            ],
-            "default": "PM"
-          },
-          "referenceLocalisation": {
-            "type": "string",
-            "description": "Référence PM pour la localisation de l’expertise."
           }
         }
       },
