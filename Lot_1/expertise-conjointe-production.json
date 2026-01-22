@@ -1094,8 +1094,7 @@
                 "type": "string",
                 "description": "Type de ticket Expertise Conjointe en Production",
                 "enum": [
-                  "expertiseConjointeProduction",
-                  "AUTRE"
+                  "expertiseConjointeProduction"
                 ],
                 "default": "expertiseConjointeProduction"
               },
@@ -1176,7 +1175,8 @@
       "AccessOrder": {
         "type": "object",
         "required": [
-          "socketServiceReference"
+          "socketServiceReference",
+          "internalOCOrderReference"
         ],
         "properties": {
           "internalOCOrderReference": {
@@ -1192,7 +1192,8 @@
       "Appointment": {
         "type": "object",
         "required": [
-          "primaryOCContact"
+          "primaryOCContact",
+          "appointmentId"
         ],
         "properties": {
           "appointmentId": {
@@ -1346,7 +1347,7 @@
         "required": [
           "identifiedDefect",
           "interventionDescription",
-          "isNecessary",
+          "isAddtionnalInterventionNecessary",
           "opticalRouteCompliantWithReference",
           "pboCableReference",
           "pboFiberInformation",
@@ -1359,7 +1360,7 @@
           "signalOKAfterExpertise",
           "socketConnectorColor",
           "socketConnectorNumber",
-          "toBeModified"
+          "isOpticalRouteToBeModified"
         ],
         "properties": {
           "additionalIntervention": {
@@ -1373,7 +1374,7 @@
             "type": "string",
             "description": "Description de l’intervention d’expertise conjointe."
           },
-          "isNecessary": {
+          "isAddtionnalInterventionNecessary": {
             "type": "boolean"
           },
           "opticalRouteCompliantWithReference": {
@@ -1434,7 +1435,7 @@
             "format": "int32",
             "description": "Numéro connecteur prise."
           },
-          "toBeModified": {
+          "isOpticalRouteToBeModified": {
             "type": "boolean",
             "description": "Route optique à modifier (ROA)."
           }
@@ -1475,14 +1476,6 @@
           "sendFailureFlowRequired": {
             "type": "boolean",
             "description": "Envoi flux échec nécessaire."
-          },
-          "idIntervention": {
-            "type": "string",
-            "description": "Identifiant de l’intervention complémentaire."
-          },
-          "numeroDecharge": {
-            "type": "string",
-            "description": "Numéro de décharge."
           }
         }
       },
