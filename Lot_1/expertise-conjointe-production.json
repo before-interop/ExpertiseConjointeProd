@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Expertise Conjointe en Production API",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "API INTEROP pour l'objet **Trouble Ticket Expertise Conjointe en Production**.\nCette API expose la gestion des tickets, des notes, des pièces jointes et des événements.",
     "license": {
       "name": "Apache 2.0",
@@ -990,8 +990,8 @@
             "type": "object",
             "required": [
               "@type",
-              "code_oc",
-              "code_oi",
+              "codeOc",
+              "codeOi",
               "expertise",
               "initialRequest"
             ],
@@ -1013,11 +1013,11 @@
                   "OI"
                 ]
               },
-              "code_oi": {
+              "codeOi": {
                 "$ref": "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep",
                 "description": "Quadrigramme de l’OI (code ARCEP)."
               },
-              "code_oc": {
+              "codeOc": {
                 "$ref": "https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep",
                 "description": "Quadrigramme de l’OC (code ARCEP)."
               },
@@ -1494,18 +1494,18 @@
           "city": {
             "type": "string"
           },
-          "code_ban": {
+          "codeBan": {
             "type": "string"
           },
-          "code_hexacle": {
+          "codeHexacle": {
             "type": "string",
             "minLength": 10,
             "maxLength": 10
           },
-          "code_insee": {
+          "codeInsee": {
             "type": "string"
           },
-          "code_rivoli": {
+          "codeRivoli": {
             "type": "string"
           },
           "country": {
