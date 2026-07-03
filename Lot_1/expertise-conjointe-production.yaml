@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Expertise Conjointe en Production API
-  version: 1.0.0
+  version: 1.0.1
   description: 'API INTEROP pour l''objet **Trouble Ticket Expertise Conjointe en
     Production**.
 
@@ -96,7 +96,7 @@ paths:
               $ref: '#/components/schemas/TicketContradictoryProductionExpertise'
       responses:
         '201': &id001
-          description: Le ticket créé
+          description: Le ticket mis à jour
           headers:
             ETag:
               $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/utils/update.openapi.yaml#/components/headers/ETag
@@ -580,8 +580,8 @@ components:
       - type: object
         required:
         - '@type'
-        - code_oc
-        - code_oi
+        - codeOc
+        - codeOi
         - expertise
         - initialRequest
         properties:
@@ -597,10 +597,10 @@ components:
             enum:
             - OC
             - OI
-          code_oi:
+          codeOi:
             $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
             description: Quadrigramme de l’OI (code ARCEP).
-          code_oc:
+          codeOc:
             $ref: https://raw.githubusercontent.com/before-interop/common/v1/common/schemas/Interop.openapi.yaml#/components/schemas/CodeOperateurArcep
             description: Quadrigramme de l’OC (code ARCEP).
           statusChangeDetail:
@@ -667,7 +667,7 @@ components:
             - STT01
             - STT02
             description: Code du motif de changement d’état (selon transition FINISHED
-              / REJECTED / CANCELLED).
+              / REJECTED / CANCELED).
           '@type':
             type: string
             description: Type de ticket Expertise Conjointe en Production
@@ -855,7 +855,7 @@ components:
       required:
       - identifiedDefect
       - interventionDescription
-      - isAddtionnalInterventionNecessary
+      - isAdditionalInterventionNecessary
       - opticalRouteCompliantWithReference
       - pboCableReference
       - pboFiberInformation
@@ -878,7 +878,7 @@ components:
         interventionDescription:
           type: string
           description: Description de l’intervention d’expertise conjointe.
-        isAddtionnalInterventionNecessary:
+        isAdditionalInterventionNecessary:
           type: boolean
         opticalRouteCompliantWithReference:
           type: boolean
@@ -956,7 +956,7 @@ components:
         sendFailureFlowRequired:
           type: boolean
           description: Envoi flux échec nécessaire.
-    Adress:
+    Address:
       type: object
       properties:
         '@baseType':
@@ -967,15 +967,15 @@ components:
           type: string
         city:
           type: string
-        code_ban:
+        codeBan:
           type: string
-        code_hexacle:
+        codeHexacle:
           type: string
           minLength: 10
           maxLength: 10
-        code_insee:
+        codeInsee:
           type: string
-        code_rivoli:
+        codeRivoli:
           type: string
         country:
           type: string
